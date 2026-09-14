@@ -1,6 +1,7 @@
 import { Client } from 'pg';
 import { readFile } from 'node:fs/promises';
 import * as core from '@actions/core';
+import path from 'node:path';
 
 export default class DB {
     private URL: string;
@@ -13,7 +14,8 @@ export default class DB {
     }
 
     async createTables(callback?: (e: any, r: any) => any) {
-        const tables: string = await readFile('app/database/tables.sql', 'utf8');
+        const tablesPath = path.join(__dirname, '..', 'app', 'database', 'tables.sql');
+        const tables: string = await readFile(tablesPath, 'utf8');
         const req = async () => {
             this.runQuery('Creating Database Tables', tables, callback);
         };
